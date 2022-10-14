@@ -10,8 +10,12 @@ create table tbl_board (
   updatedate date default sysdate
 );
 
-alter table tbl_board add constraint pk_board 
-primary key (bno);
+alter table tbl_board add constraint pk_board primary key (bno);
+
+insert into tbl_board (bno, title, content, writer) values ( seq_board.nextval, '테스트 제목', '테스트 내용','user00');
+--재귀복사
+insert into tbl_board (bno, title, content, writer) select seq_board.nextval,title, content, writer from tbl_board
+
 
 /*Part4. Rest 방식과 Ajax를 이용하는 댓글 처리 SQL*/
 create table tbl_reply(
