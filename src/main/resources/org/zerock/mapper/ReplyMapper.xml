@@ -18,6 +18,7 @@
 	
 	<update id="update">
 		update tbl_reply set reply=#{reply}, updatedate = sysdate
+		<if test='#{replyer} !=null '>,replyer = #{replyer}</if>
 		where rno=#{rno}
 	</update>
 	
