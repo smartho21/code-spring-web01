@@ -33,7 +33,8 @@
 		$.getJSON("/replies/pages/"+bno+"/"+page+".json",
 			function(data){
 				if(callback){
-					callback(data);
+					//callback(data);//댓글 목록만 가져오는 경우
+					callback(data.replyCnt, data.list);//댓글 숫자와 목록을 가져오는 경우
 				}
 			}).fail(function(xhr, status, err){
 				if(error){
@@ -58,28 +59,28 @@
 			}
 		})
 	}
-
-	function update(reply, callback, error){
-		console.log("RNO : "+reply.rno);
+	
+	function update(reply, callback, error) {
+		console.log("RNO: " + reply.rno);
 
 		$.ajax({
-			type: 'PUT',
-			url: '/replies/'+reply.rno,
-			data:JSON.stringify(reply),
-			contentType:"application/json;charset=utf-8",
-			succes:function(result,status, xhr){
-				if(callback){
+			type : 'put',
+			url : '/replies/' + reply.rno,
+			data : JSON.stringify(reply),
+			contentType : "application/json; charset=utf-8",
+			success : function(result, status, xhr) {
+				if (callback) {
 					callback(result);
 				}
 			},
-			error:function(xhr, status, er){
-				if(error){
+			error : function(xhr, status, er) {
+				if (error) {
 					error(er);
 				}
 			}
-		})
+		});
 	}
-
+	
 	function get(rno, callback, error){
 		$.get("/replies/"+rno+".json",function(result){
 			if(callback){
