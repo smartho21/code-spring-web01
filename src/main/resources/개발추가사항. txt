@@ -1,0 +1,4 @@
+★21 파일업로드 방식 오류 
+tomcat의  context.xml에서 아래 추가
+<Context allowCasualMultipartParsing="true" path="/">
+<Resources cachingAllowed="true" cacheMaxS ize="1000000" />
