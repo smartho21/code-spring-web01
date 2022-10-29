@@ -433,6 +433,7 @@ public class UploadController {
 
 			if (type.equals("image")) {
 
+				
 				String largeFileName = file.getAbsolutePath().replace("s_", "");
 
 				log.info("largeFileName: " + largeFileName);

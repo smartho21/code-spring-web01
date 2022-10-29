@@ -11,6 +11,56 @@
 </div>
 <!-- /.row -->
 
+<style>
+.uploadResult {
+	width: 100%;
+	background-color: gray;
+}
+
+.uploadResult ul {
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult ul li {
+	list-style: none;
+	padding: 10px;
+}
+
+.uploadResult ul li img {
+	width: 100px;
+}
+
+.uploadResult ul li span {
+	color:white;
+}
+
+.bigPictureWrapper {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top:0%;
+  width:100%;
+  height:100%;
+  background-color: gray; 
+  z-index: 100;
+}
+
+.bigPicture {
+  position: relative;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigPicture img{
+	width:600px;
+}
+</style>
+
 <div class="row">
   <div class="col-lg-12">
 
@@ -66,11 +116,37 @@
 </div>
 <!-- /.row -->
 
-<!-- 댁글 목록 처리 시작-->
+<!--원본 첨부파일이 보여질 영역 시작 -->
+<div class='bigPictureWrapper'>
+	<div class='bigPicture'>
+	
+	</div>
+</div>
+<!--원본 첨부파일이 보여질 영역 완료 -->
+
+<!--thumnail 이 보여질 영역 시작 -->
 <div class='row'>
-
   <div class="col-lg-12">
+  	<div class="panel panel-default">
+  		<div class="panel-heading">Files</div>
+  		<!-- /.panel-heading -->
+  		<div class="panel-body">
+  			<div class="uploadResult">
+  				<ul>
+  				</ul>
+  			</div>
+  		</div>
+  		<!-- end panel-body -->
+  	</div>
+  	<!-- end panel panel-default -->
+  </div>
+  <!-- end col-lg-12 -->
+</div>
+<!--thumnail이 보여질 영역 완료 -->
 
+<!-- 댓글 목록 처리 시작-->
+<div class='row'>
+  <div class="col-lg-12">
     <!-- /.panel 댓글 제목/버튼 영역 시작-->
     <div class="panel panel-default">
        <div class="panel-heading">
@@ -144,7 +220,60 @@
     var bnoValue='<c:out value="${board.bno}"/>';
     var replyUL=$(".chat");
     showList(1);
-
+	
+    //게시물 첨부파일 function 시작
+    (function(){
+    	var bno = '<c:out value="${board.bno}"/>';
+    	$.getJSON("/board/getAttachList",{bno:bno}, function(arr){
+    		console.log(arr);
+    		var str = "";
+    		$(arr).each(function(i,attach){
+    			//image type
+    			if(attach.fileType){
+    				var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/s_"+attach.uuid +"_"+attach.fileName);
+    				str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.image+"'>";
+    				str += " <div><img src='/display?fileName="+fileCallPath+"'></div></li>";
+    			}else{
+    				str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.image+"' ><div>";
+    				str += "<span> "+ attach.fileName+"</span>";
+    				str += "<img src='/resources/img/attach.png'> </li>";
+    			}
+    		});
+    		$(".uploadResult ul").html(str);
+    		
+    	}); //end getjson
+    })(); //end function
+    //게시물 첨부파일 function 완료
+    
+    //첨부파일 클릭 시 이벤트 처리 시작
+    $(".uploadResult").on("click","li",function(e){
+    	console.log("view image");
+    	var liObj = $(this);
+    	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+    	if(liObj.data("type")){
+    		showImage(path.replace(new RegExp(/\\/g),"/"));
+    	}else {
+    		//download
+    		self.location = "/download?fileName="+path;
+    	}
+    });
+    
+    function showImage(fileCallPath){
+    	//alert(fileCallPath);
+    	
+    	$(".bigPictureWrapper").css("display","flex").show();
+    	$(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>")
+    		.animate({width:'100%',height:'100%'},1000);
+    }
+    
+    $(".bigPictureWrapper").on("click", function(e){
+    	$(".bigPicture").animate({width:'0%', height:'0%'},1000);
+    	setTimeout(function(){
+    		$('.bigPictureWrapper').hide();
+    	},1000);
+    });
+    //첨부파일 클릭 시 이벤트 처리 완료
+    
     function showList(page){
     	console.log("show list "+page);
     	

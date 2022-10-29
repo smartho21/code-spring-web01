@@ -7,11 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>Upload with Ajax</h1>
-
-
-
-	<style>
+<h1>Upload with Ajax</h1>
+<style>
 .uploadResult {
 	width: 100%;
 	background-color: gray;
@@ -73,7 +70,6 @@
 
 
 	<button id='uploadBtn'>Upload</button>
-
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
 		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 		crossorigin="anonymous"></script>
@@ -81,26 +77,22 @@
 	<script>
 
 	function showImage(fileCallPath){
-	  
-	  //alert(fileCallPath);
-	
+	 // alert(fileCallPath);
 	  $(".bigPictureWrapper").css("display","flex").show();
-	  
-	  $(".bigPicture")
+ 	  $(".bigPicture")
 	  .html("<img src='/display?fileName="+ encodeURI(fileCallPath)+"'>")
-	  .animate({width:'100%', height: '100%'}, 1000);
-
+	  .animate({width:'100%', height: '100%'}, 1000); 
 	}
 	
 	$(".bigPictureWrapper").on("click", function(e){
 	  $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
-/* 	  setTimeout(() => {
+ 	  setTimeout(() => {
 	    $(this).hide();
-	  }, 1000); */
+	  }, 1000); 
 	  
-	  setTimeout(function() {
+	 /*  setTimeout(function() {
 		  $(".bigPicture").hide();
-	  }, 1000);
+	  }, 1000); */
 	  
 	});
 
@@ -179,13 +171,8 @@
 		var cloneObj = $(".uploadDiv").clone();
 
 		$("#uploadBtn").on("click", function(e) {
-
 			var formData = new FormData();
-
-			var formData = new FormData();
-
 			var inputFile = $("input[name='uploadFile']");
-
 			var files = inputFile[0].files;
 
 			//console.log(files);
@@ -354,13 +341,13 @@
      }else{
        
        var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
-       str += "<li><img src='/display?fileName="+fileCallPath+"'></li>'";
+       /* str += "<li><img src='/display?fileName="+fileCallPath+"'></li>'"; */
        
-/*       var originPath = obj.uploadPath+ "\\"+obj.uuid +"_"+obj.fileName;       
+       var originPath = obj.uploadPath+ "\\"+obj.uuid +"_"+obj.fileName;       
        originPath = originPath.replace(new RegExp(/\\/g),"/");       
        str += "<li><a href=\"javascript:showImage(\'"+originPath+"\')\">"+"<img src='display?fileName="+fileCallPath+"'></a>"+
               "<span data-file=\'"+fileCallPath+"\' data-type='image'> x </span>"+"<li>";
-              */
+              
      }
    });
    
