@@ -13,4 +13,7 @@ public interface BoardAttachMapper {
 	
 	//첨부파일의 삭제
 	public void deleteAll(Long bno);
+	
+	//잘못 업로드된 파일 삭제
+	public List<BoardAttachVO> getOldFiles();
 }
