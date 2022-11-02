@@ -9,6 +9,8 @@ import java.util.stream.IntStream;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,19 +28,16 @@ import lombok.extern.log4j.Log4j;
 public class SampleController {
 //	@Autowired
 //	SampleVO sampleVO;
-	
 	@GetMapping(value = "/getText", produces = "text/plain; charset=UTF-8")
 	public String getText() {
 		log.info("MIME TYPE: " + MediaType.TEXT_PLAIN_VALUE);
 		return "안녕하세요";
-
 	}
 
 	@GetMapping(value="/getSample",produces= {MediaType.APPLICATION_JSON_UTF8_VALUE,MediaType.APPLICATION_XML_VALUE})
 	public SampleVO getSample() {
 		return new SampleVO(112,"스타","로드");
 	}
-	
 	
 	@GetMapping(value="/getSample2")
 	public SampleVO getSample2() {
@@ -68,7 +67,6 @@ public class SampleController {
 		}else {
 			result = ResponseEntity.status(HttpStatus.OK).body(vo);
 		}
-		
 		return result;
 	}
 	
@@ -85,4 +83,15 @@ public class SampleController {
 		return ticket;
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	@GetMapping("/annoMember")
+	public void doMember2() {
+		log.info("logined annotation member");
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@GetMapping("/annoAdmin")
+	public void doAdmin2() {
+		log.info("admin annotation only");
+	}
 }
